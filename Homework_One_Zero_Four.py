@@ -27,10 +27,11 @@ keyword = browser.find_element_by_css_selector("#ikeyword")
 keyword.send_keys("數據") #########輸入搜尋 此欄位應設定變數
 keyword.send_keys(Keys.ENTER) #送出輸入的關鍵字
 browser.implicitly_wait(10)
-
 soup = bs(browser.page_source,'lxml')   ##用bs解析browser.page_source編碼
 getpages = int(soup.select(".page-select option")[0].text[6:-2])
-                                         ##抓取總共頁數
+urlpage = browser.current_url
+browser.quit()
+##抓取總共頁數
                                         #將頁數變為int屬性 , 指派給變數getpages跑迴圈
 
 # In[ ]:
