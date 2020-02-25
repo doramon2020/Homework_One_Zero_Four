@@ -11,12 +11,11 @@ from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup as bs
 from lxml import html
 import time                              
-"""chrome_options = Options()               #不用
-option.add_argument("headless")          #視窗
+"""chrome_options = Options()               #不用視窗
 chrome_options.add_argument('--headless') # 開啟
 chrome_options.add_argument('--disable-gpu') #唷"""
 
-browser = webdriver.Chrome(executable_path='/Users/James/python課堂練習/Python爬蟲/chromedriver')
+browser = webdriver.Chrome(executable_path='/Users/James/python課堂練習/Python爬蟲/chromedriver',chrome_options=chrome_options)
 
 browser.get("http://104.com.tw/") #用selenium開啟104網頁
 browser.implicitly_wait(10) #避免固定等待時間
