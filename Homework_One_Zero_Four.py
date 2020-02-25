@@ -3,15 +3,19 @@
 
 # In[2]:
 
-
 import requests
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.chrome.options import Options #不用視窗開啟
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup as bs
 from lxml import html
-import time
-#找到 chromedriver
+import time                              
+"""chrome_options = Options()               #不用
+option.add_argument("headless")          #視窗
+chrome_options.add_argument('--headless') # 開啟
+chrome_options.add_argument('--disable-gpu') #唷"""
+
 browser = webdriver.Chrome(executable_path='/Users/James/python課堂練習/Python爬蟲/chromedriver')
 
 browser.get("http://104.com.tw/") #用selenium開啟104網頁
@@ -24,24 +28,10 @@ keyword.send_keys("數據") #########輸入搜尋 此欄位應設定變數
 keyword.send_keys(Keys.ENTER) #送出輸入的關鍵字
 browser.implicitly_wait(10)
 
-### 以下為換頁方法
-                                        #找到class page-select選擇頁面
-#selectSite = Select(browser.find_element_by_css_selector(".page-select"))
-#selectSite.select_by_value('2')#選取第二頁
-
-soup.select('.page-select')[0].text.replace('第','').replace('頁','').split('/')[-1] #可取出總共頁數,注意是str屬性
-pages = int(soup.select('.page-select')[0].text.replace('第','').replace('頁','').split('/')[-1])
-
-#將頁數變為int屬性 , 指派給變數pages跑迴圈
-############待解決問題: 1. 如何判斷總共有幾頁, done  2. 統整加入迴圈讓他從頭跑道尾 done
-
-
-# In[ ]:
-
-
-soup = bs(browser.page_source,'lxml') #browser.page_source指令可用selenium方式抓取當前網頁資訊
-#browser.page_source #可去掉此行#號看資料長相
-
+soup = bs(browser.page_source,'lxml')   ##用bs解析browser.page_source編碼
+getpages = int(soup.select(".page-select option")[0].text[6:-2])
+                                         ##抓取總共頁數
+                                        #將頁數變為int屬性 , 指派給變數getpages跑迴圈
 
 # In[ ]:
 
@@ -49,9 +39,15 @@ soup = bs(browser.page_source,'lxml') #browser.page_source指令可用selenium�
 #抓取資料
 soups = soup.select('article')
 
-for page in range(pages+!)[1:]:
+for getpage in range(getpages+1)[1:]:
+    browser = webdriver.Chrome(executable_path='/Users/James/python課堂練習/Python爬蟲/chromedriver') #啟動瀏覽器必定要加
+    browser.get(urlpage)
     selectSite = Select(browser.find_element_by_css_selector(".page-select"))
-    selectSite.select_by_value(str(pages))
+    selectSite.select_by_value(str(getpage))
+    time.sleep(10)
+    soup = bs(browser.page_source,'lxml')
+    soups = soup.select('article')
+    browser.quit()
     for i in soups:
             if 'b-block--ad' in i.get('class'):
                 continue #跳過有廣告標籤的公司
@@ -60,15 +56,14 @@ for page in range(pages+!)[1:]:
                 browser = webdriver.Chrome(executable_path='/Users/James/python課堂練習/Python爬蟲/chromedriver')
                 browser.get(url) #
                 browser.implicitly_wait(10) #避免固定等待時間
-                soup = bs(browser.page_source,'lxml')
-                #soup=bs(browser.page_source,"html.parser") 
-                rawdata = requests.get(url)
+                soup2 = bs(browser.page_source,'lxml')
+                soup.select('.job-description__content')[0].text.strip().replace('\n','').replace('\r','').replace('\t','')
             if 'b-block--top-bord' not in i.get('class'):
                 break
 #soup.select('.job-description__content')[0].text.strip().replace('\n','').replace('\r','').replace('\t','') #工作內容
-#           soup.select('u')[0].text.strip() #職務類別
-#           soup.select('.monthly-salary')[0].text.strip() #工作待遇   
-#soup.find_all("p", class_="t3 mb-0") 
+#           soup.select('u')[0].text.strip() #職務類別  好像不能用會出錯,有些網頁沒u標籤
+#           soup.select('.monthly-salary')[0].text.strip() #工作待遇  好像不能用會出錯,有些網頁沒此項
+#soup.find_all("p", class_="t3 mb-0")  #好像不能用會出錯,有些網頁沒此項
 #總共可找到10筆資料,依序為
 #0. 全職
 #1. 地址
