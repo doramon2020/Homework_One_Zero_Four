@@ -58,6 +58,7 @@ for getpage in range(getpages+1)[1:]:
                 browser.get(url) #
                 browser.implicitly_wait(10) #避免固定等待時間
                 soup2 = bs(browser.page_source,'lxml')
+                browser.quit()
                 soup2.select('.job-description__content')[0].text.strip().replace('\n','').replace('\r','').replace('\t','')
             if 'b-block--top-bord' not in i.get('class'):
                 break
