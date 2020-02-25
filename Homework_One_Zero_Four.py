@@ -57,12 +57,12 @@ for getpage in range(getpages+1)[1:]:
                 browser.get(url) #
                 browser.implicitly_wait(10) #避免固定等待時間
                 soup2 = bs(browser.page_source,'lxml')
-                soup.select('.job-description__content')[0].text.strip().replace('\n','').replace('\r','').replace('\t','')
+                soup2.select('.job-description__content')[0].text.strip().replace('\n','').replace('\r','').replace('\t','')
             if 'b-block--top-bord' not in i.get('class'):
                 break
-#soup.select('.job-description__content')[0].text.strip().replace('\n','').replace('\r','').replace('\t','') #工作內容
-#           soup.select('u')[0].text.strip() #職務類別  好像不能用會出錯,有些網頁沒u標籤
-#           soup.select('.monthly-salary')[0].text.strip() #工作待遇  好像不能用會出錯,有些網頁沒此項
+#soup2.select('.job-description__content')[0].text.strip().replace('\n','').replace('\r','').replace('\t','') #工作內容
+#           soup2.select('u')[0].text.strip() #職務類別
+#           soup2.select('.monthly-salary')[0].text.strip() #工作待遇
 #soup.find_all("p", class_="t3 mb-0")  #好像不能用會出錯,有些網頁沒此項
 #總共可找到10筆資料,依序為
 #0. 全職
